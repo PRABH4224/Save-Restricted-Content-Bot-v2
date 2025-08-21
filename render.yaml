@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: telegram-content-bot
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -m devgagan
+    envVars:
+      - key: API_ID
+        sync: false
+      - key: API_HASH
+        sync: false
+      - key: BOT_TOKEN
+        sync: false
+      - key: OWNER_ID
+        sync: false
+      - key: CHANNEL_ID
+        sync: false
+      - key: LOG_GROUP
+        sync: false
+      - key: MONGO_DB
+        sync: false
