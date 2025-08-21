@@ -19,6 +19,9 @@ from pyrogram import idle
 from devgagan.modules import ALL_MODULES
 from devgagan.core.mongo.plans_db import check_and_remove_expired_users
 from aiojobs import create_scheduler
+from flask import Flask
+import threading
+import os
 
 # ----------------------------Bot-Start---------------------------- #
 
@@ -50,7 +53,29 @@ async def devggn_boot():
 📜 License: MIT License
 ---------------------------------------------------
 """)
+app = Flask(__name__)
 
+@app.route('/')
+def health_check():
+    return "Bot is running!", 200
+
+@app.route('/health')
+def health():
+    return "OK", 200
+
+def run_flask():
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
+
+# Start Flask in a separate thread
+if __name__ == "__main__":
+    flask_thread = threading.Thread(target=run_flask)
+    flask_thread.daemon = True
+    flask_thread.start()
+    
+    # Your existing bot code here
+    # application.run_polling()
+    
     asyncio.create_task(schedule_expiry_check())
     print("Auto removal started ...")
     await idle()
